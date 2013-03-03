@@ -24,12 +24,17 @@
 }
 .tt-hint {
   position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
+  top: 6 !important;
+  left: 4 !important;
+  width:98%;
+  right:4;
   border-color: transparent !important;
   -webkit-box-shadow: none !important;
   -moz-box-shadow: none !important;
   box-shadow: none !important;
+  color:#aaa;
+  display:none;
+
 }
 .tt-dropdown-menu,
 .tt-suggestions,
@@ -37,13 +42,24 @@
   padding: 0;
   margin: 0;
   list-style: none;
-  border:thin solid #ddd;
+ width:330px;
+  background:#ddd;
+  color:#555;
+  
+}
+
+li.tt-suggestion:hover{
+
+color:#fff;
 }
 .tt-dropdown-menu {
+  padding-left:10px;
+  padding-right:10px;
   position: absolute;
   top: 100%;
   left: 0;
   z-index: 100;
+  
   /* TODO: need default z-index, should be configurable */
 
   display: none;

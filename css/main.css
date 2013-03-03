@@ -86,26 +86,30 @@ padding-top:50px;
 background:#eee;
 }
 
+#notes{
+
+}
 #input {
-background:#ddd;
+background:#fff;
 width:350px;
 border:thin solid #ccc;
 padding:5px;
 margin-top:3px;
 outline-color:#69d;
-border-radius:4px;
+
+color:#222;
 }
 
 #fixed_nav {
-background:#ddd;
+
 text-align:center;
 position:fixed;
 top:0;
 left:0;
 right:0;
 height:40px;
-box-shadow:#aaa 0 0 8px 0;
-border-bottom:1px solid #ccc;
+
+
 font-color:#FFF;
 padding-top:3px;
 padding-bottom:3px;z-index:10;
@@ -123,14 +127,16 @@ background:#eee;
 #pop{
 display:none;
 background:#fff;
-position:fixed;
-top:46px;
+
 box-shadow:#ccc 0 0 8px 0;
-margin-right:10px;
-margin-left:10px;
+
+margin-right:25px;
 z-index:0;
-height:100%;
+padding:0;
+
+width:100%;
 }
+
 
 #pop_title{
 background:#ddd;
@@ -152,16 +158,18 @@ background:#ccc;
 .note {
 margin-top:10px;
 margin-bottom:10px;
-min-height:247px;
-max-height:247px;
+min-height:200px;
+max-height:200px;
 background:#FFF;
 box-shadow:#ccc 0 0 8px 0;
+
+
 
 }
 
 .inner {
 margin-top:3px;
-height:221px;
+height:174px;
 overflow:hidden;
 background:#FFF;
 padding-left:10px;
@@ -176,8 +184,7 @@ height:100%;
 
 .inner:hover {
 
-overflow-y:scroll;
-overflow-x:hidden;
+
 
 }
 
@@ -189,6 +196,8 @@ padding:6px;
 line-height:12px;
 height:10px;
 width:10px;
+
+
 }
 
 .delete:hover {
@@ -196,6 +205,8 @@ background:#d66;
 }
 
 .expand {
+
+
 cursor:pointer;
 float:right;
 background:#ddd;

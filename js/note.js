@@ -1,30 +1,43 @@
- $("#input").typeahead({
-        prefetch: 'notes.json'
-        }); 
-
-        $("input").keypress(function(event) {
-        if (event.which == 13) {
-        input();
-        }
+//setup stuff
+$('#input').val("");
+$("#input").attr("autocomplete","off");
+$("input").keypress(function(event) {
+if (event.which == 13) {
+input();
+}
+});
+       //load and display notes
+       $(document).ready(function(){
+        var data = load();
+        write_notes(data);
         });
-       
-        //function to load an display notes
+
+        //function to load notes
         function load(){
-        var notes = $.getJSON('notes.json');
+        var notes;
         $.getJSON('notes.json', function(data) {
-            $('#num').html(length);
-            $('#notes').empty();
-            data.posts.reverse();
-            var length = data.posts.length;
+            
+            write_notes(data);
+           
+        });
+       }
+       //display notes
+        function write_notes(data){
+        console.log(data);
+        $('#num').html(length);
+        $('#notes').empty();
+        data.posts.reverse();
+        var length = data.posts.length;
             //display notes
                 for (var i = 0; i < length; i++) {
                     if (typeof data.posts[i]['title'] != 'undefined'){
-                    $('#notes').append('<div class="one-third column note"><span style="width:100%;background:#ddd;padding:2px;padding-right:10px; padding-left:10px;"><b>'+data.posts[i]['title'].replace("@","")+'</b><a class="delete" onclick=del(\''+data.posts[i]['title']+'\')>X</a><a class="expand" onclick="zoom('+i+')">+</a></span><div id="'+i+'"  onClick="this.contentEditable=\'true\';" onblur="e('+i+')" class="inner">'+data.posts[i]['text']+'</div></div>');  
+                    $('#notes').append('<div  id="'+i+'" class="one-third column note"><span style="padding:5px;width:100%;background:#ddd;padding:2px;padding-right:10px; padding-left:10px;"><b>'+data.posts[i]['title'].replace("@","")+'</b><a class="delete" onclick=del(\''+data.posts[i]['title']+'\')>x</a><a class="expand" onclick="expand('+i+')">+</a></span><div id="'+i+'"  onblur="e('+i+')" onClick="this.contentEditable=\'true\';" class="inner">'+data.posts[i]['text']+'</div></div>');  
                     }
+
                 };
-            }); 
-        $('#input').val("");
         }
+
+        
         //delet function
         function del(title){
             if(confirm('Delete '+title+'?')){
@@ -41,38 +54,39 @@
         //edit function (allows editing via onclick)
         function e(id){
         var div = '#'+id;
-        var text = $(div).html();
+        var text = $(div+' .inner').html();
             $.getJSON('notes.json', function(data) {
                 data.posts.reverse();
                 title = data.posts[id]['title'];
-                to_json(title,text)
+                to_json(title,text,"write")
             });
         }
 
-        function zoom(id){
-            console.log(id);
-             var div = '#'+id;
-        var text = $(div).html();
-            $.getJSON('notes.json', function(data) {
-                data.posts.reverse();
-                title = data.posts[id]['title'];
-                $('#pop_title').html('<span style="margin-left:20px; font-size:18px">'+title.replace("@","")+'</span><a style="margin-right:10px;" class="delete" onclick="zoom_c(\''+title+'\')">X</a>');
-                $('#pop_inner').html(text);
-                $('#pop').slideDown();
-            });
-
-           
-            
+        //expand note
+        function expand(id){
+        var div = '#'+id;
+        note_width = $(div).width();
+        $(div+' .inner').css({
+            'overflow-y': 'scroll',
+            'overflow-x': 'hidden'
+        });
+        $(div).animate({
+            width: 940,
+        });
+        $(div+' .expand').html('-');
+        $(div+' .expand').attr('onclick', 'expand_c('+id+','+note_width+')');
         }
 
-        function zoom_c(title){
-            
-            text =  $('#pop_inner').html();
-
-            to_json(title,text);
-             $('#pop').slideUp();
-
-
+        function expand_c(id,width,height){
+        var div = '#'+id;
+        $(div).animate({
+        width: width,
+        });
+        $(div+' .inner').css({
+            'overflow-y': 'hidden'
+        });
+        $(div+' .expand').html('+');
+        $(div+' .expand').attr('onclick', 'zoom('+id+')');
         }
         //main function to filter and sort input
         function input(){
@@ -106,21 +120,15 @@
             delete data[special[i]];
             }
         //send AJAX write request
-        $.ajax({
-            url: "json.php",
-            type: "POST",
-            data: ({action:"write",title:title[0],text:data,tags:tags}),
-            context: document.body,
-            success: function(){load();}
-            });
-        }
+       to_json(title[0],data.join(" "),"write");
+         }
         //save to json via ajax
-        function to_json(title,text){
+        function to_json(title,text,action){
         text = text.split(" ");
         $.ajax({
             url: "json.php",
             type: "POST",
-            data:({edit:'1',action:"write",title:title,text:text}),
+            data:({edit:'1',action:action,title:title,text:text}),
             context: document.body,
             success: function(){load();}
             });  
